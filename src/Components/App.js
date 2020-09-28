@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Card from './Card'
+import CharacterCard from './CharacterCard'
+import { CardDeck } from 'react-bootstrap';
 
 function App() {
 
@@ -12,24 +13,30 @@ function App() {
     .then(res => res.json())
     .then(setData)
     .catch(console.error)
-  }, []);
+  }, [apiKey]);
 
   if (data) {
+    const filteredData = data.filter(item => 'house' in item)
+    
+    const cards = filteredData.map(item => (
+      <CharacterCard
+        key={item['_id']}
+        name={item['name']}
+        house={item['house']}
+        ministryOfMagic={item['ministryOfMagic']}
+        orderOfThePhoenix={item['orderOfThePhoenix']}
+        dumbledoresArmy={item['dumbledoresArmy']}
+        deathEater={item['deathEater']}
+        bloodStatus={item['bloodStatus']}
+        species={item['species']}
+      />
+      )
+    )
 
     return (
-      <div>
-        {data.map(item => (
-          <Card
-            key={item['_id']}
-            name={item['name']}
-            house={item['house']}
-            dumbledoresArmy={item['dumbledoresArmy']}
-            deathEater={item['deathEater']}
-            bloodStatus={item['bloodStatus']}
-          />
-        )
-        )}
-      </div>
+      <CardDeck>
+        {cards}
+      </CardDeck>
     )
   } 
   return null;
