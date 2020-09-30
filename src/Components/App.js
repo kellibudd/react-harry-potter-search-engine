@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import CharacterCard from './CharacterCard'
+import Search from './Search'
 import { CardDeck } from 'react-bootstrap';
 
 function App() {
 
   const apiKey = new Buffer(process.env.REACT_APP_MYAPIKEY, 'base64').toString('ascii');
+  /* Converting to base-64 - https://gist.github.com/tomi/0675e58919af4554b198cee3f84405e5 */
 
   const [data, setData] = useState(null);
 
@@ -17,7 +19,9 @@ function App() {
 
   if (data) {
     const filteredData = data.filter(item => 'house' in item)
-    
+    /* TO DO: set state as filtered data and when search input is activated - update state with filtered data 
+    TO DO: look into react router */
+
     const cards = filteredData.map(item => (
       <CharacterCard
         key={item['_id']}
@@ -34,9 +38,12 @@ function App() {
     )
 
     return (
-      <CardDeck>
-        {cards}
-      </CardDeck>
+      <div>
+        <Search />
+        <CardDeck>
+          {cards}
+        </CardDeck>
+      </div>
     )
   } 
   return null;
