@@ -8,14 +8,12 @@ function Search(props) {
         console.log('The link was clicked.');
     };
 
-    const [value, setValue] = useState(null);
-
     return (
         <InputGroup className="searchBar">
             <FormControl
                 placeholder="Enter search..."
                 aria-label="Search bar"
-                onChange={(event) => setValue(event.target.value)}
+                onChange={(event) => props.onSearch(event.target.value)}
             />
             <InputGroup.Append>
                 <Button variant="outline-secondary" onClick={handleClick}>Search</Button>

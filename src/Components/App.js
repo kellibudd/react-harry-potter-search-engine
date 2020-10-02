@@ -9,6 +9,7 @@ function App() {
   /* Converting to base-64 - https://gist.github.com/tomi/0675e58919af4554b198cee3f84405e5 */
 
   const [data, setData] = useState(null);
+  const [filterValue, setFilterState] = useState(null);
 
   useEffect(() => {
     fetch(`https://www.potterapi.com/v1/characters?key=${apiKey}`)
@@ -18,11 +19,25 @@ function App() {
   }, [apiKey]);
 
   if (data) {
-    const filteredData = data.filter(item => 'house' in item)
-    /* TO DO: set state as filtered data and when search input is activated - update state with filtered data 
-    TO DO: look into react router */
 
-    const cards = filteredData.map(item => (
+    const handleSearch = searchValue => {
+      setFilterState(searchValue)
+    }
+
+    const houseData = data.filter(item => 'house' in item)
+    
+    console.log('filter value before: ', filterValue)
+    const filterData = houseData.filter(item => item['name'] === filterValue)
+
+    const displayData = filterData ? houseData : filterData
+    console.log('displayData: ', displayData)
+    console.log('filter data: ', filterData)
+    console.log('houseData: ', houseData)
+    console.log('filter value after: ', filterValue)
+    /* TO DO: look into useEffect - CharacterCards are not rerendering after search */
+
+
+    const cards = displayData.map(item => (
       <CharacterCard
         key={item['_id']}
         name={item['name']}
@@ -39,7 +54,7 @@ function App() {
 
     return (
       <div>
-        <Search />
+        <Search onSearch={handleSearch}/>
         <CardDeck>
           {cards}
         </CardDeck>
